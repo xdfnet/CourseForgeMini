@@ -7,15 +7,12 @@ from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
 from PyQt6.QtCore import QThread, pyqtSignal
 from functools import lru_cache
-
-# 设置 Moonshot 模型常量
-MOONSHOT_MODEL = "moonshot-v1-128k"
-MAX_TOKENS = 128000
+from config import OPENAI_API_KEY, OPENAI_BASE_URL, MOONSHOT_MODEL, MAX_TOKENS
 
 # 初始化 OpenAI 客户端
 client = OpenAI(
-    api_key="sk-9eVg2GTPjYcMEtfGntrNZlsBwSt0nOBcuHIZ5sSXP2SL3HtS",
-    base_url="https://api.moonshot.cn/v1"
+    api_key=OPENAI_API_KEY,
+    base_url=OPENAI_BASE_URL
 )
 
 @lru_cache(maxsize=32)
