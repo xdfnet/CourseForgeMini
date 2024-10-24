@@ -9,8 +9,8 @@ from PyQt6.QtCore import QThread, pyqtSignal
 from functools import lru_cache
 
 # 设置 Moonshot 模型常量
-MOONSHOT_MODEL = "moonshot-v1-32k"
-MAX_TOKENS = 1000
+MOONSHOT_MODEL = "moonshot-v1-128k"
+MAX_TOKENS = 128000
 
 # 初始化 OpenAI 客户端
 client = OpenAI(
