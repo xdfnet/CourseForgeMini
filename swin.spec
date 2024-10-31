@@ -2,13 +2,32 @@
 
 a = Analysis(
     ['main.py'],
-    pathex=[],
-    binaries=[],
-    datas=[
-        # 添加 .env 文件到打包资源
-        ('.env', '.'),  # 从项目根目录复制到打包目录的根目录
+    pathex=[
+        'C:\\Windows\\System32',
+        'C:\\Windows\\SysWOW64',
+        'C:\\ProgramData\\miniconda3\\envs\\mini\\Lib\\site-packages',
     ],
-    hiddenimports=[],
+    binaries=[
+        # Qt DLLs
+        ('C:\\ProgramData\\miniconda3\\envs\\mini\\Lib\\site-packages\\PyQt6\\Qt6\\bin\\*.dll', '.'),
+        ('C:\\ProgramData\\miniconda3\\envs\\mini\\Lib\\site-packages\\PyQt6\\Qt6\\plugins\\*', './plugins'),
+        
+        # Conda 环境 DLLs
+        ('C:\\ProgramData\\miniconda3\\envs\\mini\\Library\\bin\\*.dll', '.'),
+    ],
+    datas=[],
+    hiddenimports=[
+        'PyQt6.QtCore',
+        'PyQt6.QtGui',
+        'PyQt6.QtWidgets',
+        'anthropic',
+        'openai',
+        'python-dotenv',
+        'python-pptx',
+        'markdown',
+        'mutagen',
+        'zhipuai'
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -34,7 +53,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['app.ico'],  # Windows 图标
+    icon=['app.ico'],
 )
 
 coll = COLLECT(

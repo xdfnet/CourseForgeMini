@@ -14,14 +14,12 @@ def load_config():
         base_path = os.path.dirname(os.path.abspath(__file__))
     
     env_path = os.path.join(base_path, '.env')
-    print(f"尝试加载 .env 文件: {env_path}")
     
     # 加载环境变量
     load_dotenv(env_path)
     
     # 添加调试信息
     api_key = os.getenv('ZHIPU_API_KEY')
-    print(f"读取到的 API KEY: {api_key}")
     
     config = {
         'ZHIPU_API_KEY': api_key,
@@ -30,8 +28,6 @@ def load_config():
         'MAX_TOKENS': 2048,
         'MAX_HISTORY_LENGTH': 10
     }
-    
-    print(f"配置加载完成: {config}")
     return config
 
 # 导出配置
