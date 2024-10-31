@@ -36,6 +36,7 @@ mini/
 .project
 .pydevproject
 .settings/
+.gitignore
 
 # macOS
 .DS_Store
