@@ -5,6 +5,7 @@ import re
 import platform
 import logging
 from functools import lru_cache
+from urllib import request
 from dotenv import load_dotenv
 from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLineEdit, QPushButton, QLabel, QTextEdit, QProgressBar, QMessageBox)
@@ -15,6 +16,8 @@ from markdown.treeprocessors import Treeprocessor
 from config import CONFIG, VERSION  # 从 config.py 导入配置
 from prompt_functions import generate_course_outline, generate_section_content
 from api_client import chat_with_moonshot
+from urllib.request import urlopen  # 导入 urlopen
+import json  # 导入 json
 
 # 初始化客户端
 client = None
@@ -113,15 +116,15 @@ class MainWindow(QWidget):
             self.submit_button.setEnabled(True)
             self.execute_button.setEnabled(True)
         else:
-            self.log_message("API 客户端未初始化，请检查配置")
-            self.log_message("请确保 .env 文件中包含正确的 API 密钥")
+            print("API 客户端未初始化，请检查配置")
+            print("请确保 .env 文件中包含正确的 API 密钥")
             self.submit_button.setEnabled(False)
             self.execute_button.setEnabled(False)
 
     def initUI(self):
         # 创建主布局
         main_layout = QVBoxLayout()
-        self.setWindowTitle(f'CourseForge™ Mini v{VERSION}')
+        self.setWindowTitle(f'CourseForge Mini v{VERSION}')
         self.setMinimumSize(700, 500)
 
         # 设置样式表
@@ -143,7 +146,6 @@ class MainWindow(QWidget):
                 min-height: 24px;
             }
             QPushButton {
-                background-color: #007AFF;
                 color: white;
                 border: none;
                 border-radius: 6px;
@@ -151,11 +153,16 @@ class MainWindow(QWidget):
                 font-weight: 500;
                 min-height: 32px;
             }
-            QPushButton:hover {
-                background-color: #0066D6;
+            /* 操作按钮样式 */
+            QPushButton.operationButton {
+                background-color: #28A745; /* 绿色 */
             }
-            QPushButton:pressed {
-                background-color: #0051A8;
+            /* 控制按钮样式 */
+            QPushButton.controlButton {
+                background-color: #007AFF; /* 蓝色 */
+            }
+            QPushButton:hover {
+                opacity: 0.8; /* 悬停效果 */
             }
             QPushButton:disabled {
                 background-color: #E5E5E5;
@@ -245,20 +252,40 @@ class MainWindow(QWidget):
         button_layout = QHBoxLayout()
         button_layout.setSpacing(10)
 
+        self.test_button = QPushButton('接口测试', self)
+        self.test_button.setObjectName("testButton")  # 设置对象名称
+        self.test_button.setFixedHeight(50)
+        self.test_button.setProperty("class", "controlButton")  # 设置按钮类
+        self.test_button.clicked.connect(self.test_api)
+
         self.submit_button = QPushButton('生成课程大纲', self)
+        self.submit_button.setObjectName("submitButton")  # 设置对象名称
         self.submit_button.setFixedHeight(50)
+        self.submit_button.setProperty("class", "operationButton")  # 设置按钮类
         self.submit_button.clicked.connect(self.submit)
 
         self.execute_button = QPushButton('生成课程内容', self)
+        self.execute_button.setObjectName("executeButton")  # 设置对象名称
         self.execute_button.setFixedHeight(50)
+        self.execute_button.setProperty("class", "operationButton")  # 设置按钮类
         self.execute_button.clicked.connect(self.execute_content)
 
+        self.update_button = QPushButton('检查更新', self)
+        self.update_button.setObjectName("updateButton")  # 设置对象名称
+        self.update_button.setFixedHeight(50)
+        self.update_button.setProperty("class", "controlButton")  # 设置按钮类
+        self.update_button.clicked.connect(self.check_update)
+
         self.close_button = QPushButton('关闭课程工具', self)
+        self.close_button.setObjectName("closeButton")  # 设置对象名称
         self.close_button.setFixedHeight(50)
+        self.close_button.setProperty("class", "controlButton")  # 设置按钮类
         self.close_button.clicked.connect(self.close_application)
 
+        button_layout.addWidget(self.test_button)
         button_layout.addWidget(self.submit_button)
         button_layout.addWidget(self.execute_button)
+        button_layout.addWidget(self.update_button)
         button_layout.addWidget(self.close_button)
         main_layout.addLayout(button_layout)
 
@@ -266,7 +293,21 @@ class MainWindow(QWidget):
         self.setLayout(main_layout)
 
     def log_message(self, message):
-        self.log_display.append(message)
+        """在日志显示区域输出信息"""
+        humorous_messages = {
+            "API 密钥加载成功": "API 密钥已成功加载，准备好迎接挑战！",
+            "API 连接失败,请检查配置": "哎呀，连接失败了，可能是它在喝咖啡。",
+            "开始测试API接口": "测试API接口，准备好迎接未知的冒险！",
+            "大模型说: ": "大模型发话了，听听它的高见：",
+            "当前已是最新版本": "你已经是最新版本的拥护者，继续保持！",
+            "正在检查更新...": "正在检查更新，期待新版本的降临！",
+        }
+
+        # 如果消息在幽默消息字典中，使用幽默消息
+        if message in humorous_messages:
+            self.log_display.append(humorous_messages[message])  # 使用幽默消息
+        else:
+            self.log_display.append(message)  # 默认输出原始消息
 
     def submit(self):
         """处理提交按钮点击事件，生成课程大纲"""
@@ -482,6 +523,63 @@ class MainWindow(QWidget):
     def handle_error(self, error_message):
         self.log_message("发生错误，请查看日志文件获取详细信息")  # 修复乱码
         logging.error(f"Error: {error_message}", exc_info=True)
+    
+    def test_api(self):
+        self.test_button.setEnabled(False)
+        try:
+            # 测试API连接
+            self.log_message("你好，大模型，请确认一下连接是否正常。")
+            prompt = "你好！请用一句话幽默的话介绍一下你自己是谁家的da'mo'x（30字以内），证明我们已经成功建立连接。"  # 定义 prompt
+            response = chat_with_moonshot(client, prompt)  # 传递 client 和 prompt
+            if response:
+                self.log_message(f"大模型说: {response}")
+            else:
+                self.log_message("API 大模型没反应,请检查配置")
+        except Exception as e:
+            self.log_message(f"API 大模型没反应,请检查配置: {str(e)}")
+            self.handle_error(str(e))
+        finally:
+            self.test_button.setEnabled(True)
+    
+    def check_update(self):
+        """检查更新功能"""
+        self.log_message("正在检查更新...")
+        self.update_button.setEnabled(False)
+        
+        try:
+            # 获取 GitHub 仓库的最新版本信息
+            github_url = "https://api.github.com/repos/xdfnet/CourseForgeMini2/releases/latest"  # 使用 GitHub API
+            response = urlopen(github_url)  # 使用 urlopen 发送请求
+            data = response.read()  # 读取响应数据
+            latest_version_info = json.loads(data)  # 解析 JSON 数据
+            latest_version = latest_version_info["tag_name"].replace("v", "")
+            current_version = VERSION
+            
+            if latest_version > current_version:
+                self.log_message(f"发现新版本: v{latest_version}")
+                self.log_message("请访问 https://github.com/xdfnet/CourseForgeMini2/releases/ 下载最新版本")
+                
+                # 显示更新提示对话框
+                QMessageBox.information(
+                    self,
+                    "发现新版本",
+                    f"当前版本: v{current_version}\n最新版本: v{latest_version}\n\n请访问 GitHub 下载最新版本。",
+                    QMessageBox.StandardButton.Ok
+                )
+            else:
+                self.log_message("当前已是最新版本")
+                QMessageBox.information(
+                    self,
+                    "检查更新",
+                    "当前已是最新版本",
+                    QMessageBox.StandardButton.Ok
+                )
+        except Exception as e:
+            self.log_message(f"检查更新出错: {str(e)}")
+            self.handle_error(str(e))
+            
+        finally:
+            self.update_button.setEnabled(True)
 
 # 主程序入口
 if __name__ == '__main__':

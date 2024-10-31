@@ -100,7 +100,7 @@ CourseForgeMini/
 ├── api_client.py     # API 客户端
 ├── prompt_functions.py # 提示词生成
 ├── requirements.txt  # 依赖清单
-└── .env             # 环境变量
+└── .env              # 环境变量
 ```
 
 ## 常见问题
