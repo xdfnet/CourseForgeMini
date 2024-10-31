@@ -1,4 +1,12 @@
+# 忽略 macOS 的缓存文件
 /.DS_Store
+
+# 忽略环境变量文件
 /.env
+
+# 忽略构建和分发目录
 /build
 /dist
+
+# 忽略 Python 编译文件
+__pycache__
