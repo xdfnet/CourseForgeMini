@@ -3,7 +3,7 @@ import sys  # 添加这行
 from dotenv import load_dotenv
 
 # 版本号
-VERSION = "1.5.0"
+VERSION = "1.6.0"
 
 def load_config():
     """加载配置"""
