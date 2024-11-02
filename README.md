@@ -30,15 +30,7 @@
    pip install -r requirements.txt
    ```
 
-2. **配置 API**
-
-   创建 `.env` 文件并添加：
-
-   ```
-   ZHIPU_API_KEY=你的智谱AI密钥
-   ```
-
-3. **运行程序**
+2. **运行程序**
 
    ```bash
    python main.py
@@ -59,7 +51,7 @@
 
 - Python 3.8+
 - PyQt6
-- 智谱 AI API 密钥
+- 智谱 AI API 支持
 
 ## 开发环境设置
 
@@ -88,38 +80,38 @@
 使用 PyInstaller 打包：
 
 ```bash
-pyinstaller smac.spec
+# windows
+pyinstaller -F -w -i images/app.ico main.py
+# mac
+pyinstaller --clean --windowed --onefile "--name 'CourseForgeMini' --icon images/app.icns main.py
+# linux
+pyinstaller --clean --windowed --onefile "--name 'CourseForgeMini' --icon images/app.icns main.py
 ```
 
 ## 目录结构
 
 ```
 CourseForgeMini/
-├── main.py           # 主程序
-├── config.py         # 配置管理
-├── api_client.py     # API 客户端
+├── main.py # 主程序
+├── config.py # 配置管理
+├── api_client.py # API 客户端
 ├── prompt_functions.py # 提示词生成
-├── requirements.txt  # 依赖清单
-└── .env              # 环境变量
+└── requirements.txt # 依赖清单
 ```
+
 
 ## 常见问题
 
-1. **找不到 .env 文件？**
-   - 确保在项目根目录创建 .env 文件
-   - 检查 API 密钥格式是否正确
-
-2. **生成内容失败？**
+1. **生成内容失败？**
    - 检查网络连接
-   - 确认 API 密钥有效
    - 查看日志获取详细错误信息
 
 ## 联系方式
 
 - 邮箱：<xdfnet@gmail.com>
 - 官网：
-  - [www.courseforge.cn](https://www.courseforge.cn)
   - [www.course-forge.com](https://www.course-forge.com)
+  - [www.courseforge.cn](https://www.courseforge.cn)
 
 ## 许可证
 
