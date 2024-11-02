@@ -66,3 +66,6 @@ config.local.ini
 # PyInstaller
 *.manifest
 *.spec
+
+# 其他
+mkey.py

@@ -1,28 +1,23 @@
 import os
-import sys  # 添加这行
-from dotenv import load_dotenv
+import sys
+import base64
 
 # 版本号
-VERSION = "1.6.0"
+VERSION = "1.8.0"
+
+def get_api_key():
+    """获取 API key"""
+    encoded_key = "NTg3NDczNmYzMzM5MDRlYjgwOThkNDUxNGQ1ZTAyZjMucmo4VkdNTnBSd0h1c1BaQQ=="
+    try:
+        return base64.b64decode(encoded_key).decode('utf-8')
+    except Exception as e:
+        print(f"解码 API key 失败: {str(e)}")
+        return None
 
 def load_config():
     """加载配置"""
-    # 确定 .env 文件路径
-    if getattr(sys, 'frozen', False):
-        base_path = sys._MEIPASS
-    else:
-        base_path = os.path.dirname(os.path.abspath(__file__))
-    
-    env_path = os.path.join(base_path, '.env')
-    
-    # 加载环境变量
-    load_dotenv(env_path)
-    
-    # 添加调试信息
-    api_key = os.getenv('ZHIPU_API_KEY')
-    
     config = {
-        'ZHIPU_API_KEY': api_key,
+        'ZHIPU_API_KEY': get_api_key(),
         'BASE_URL': "https://open.bigmodel.cn/api/paas/v4",
         'MODEL': "glm-4-flash",
         'MAX_TOKENS': 2048,

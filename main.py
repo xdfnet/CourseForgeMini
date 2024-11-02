@@ -18,14 +18,25 @@ from prompt_functions import generate_course_outline, generate_section_content
 from api_client import chat_with_moonshot
 from urllib.request import urlopen  # 导入 urlopen
 import json  # 导入 json
+import base64
+
+def get_root_dir():
+    """获取程序根目录"""
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    else:
+        return os.path.dirname(os.path.abspath(__file__))
 
 # 初始化客户端
 client = None
 if CONFIG['ZHIPU_API_KEY']:
     try:
         client = ZhipuAI(api_key=CONFIG['ZHIPU_API_KEY'])
+        print("API 客户端初始化成功")
     except Exception as e:
-        print("未能加载智谱 API KEY")
+        print(f"初始化智谱 API 客户端失败: {str(e)}")
+else:
+    print("API key 获取失败")
 
 # 在文件开头的导入部分下面添加这些函数
 
