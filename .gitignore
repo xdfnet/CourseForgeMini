@@ -69,3 +69,4 @@ config.local.ini
 
 # 其他
 mkey.py
+encode_keys.py
