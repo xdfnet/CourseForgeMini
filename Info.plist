@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 基本信息 -->
+    <key>CFBundleDisplayName</key>
+    <string>CourseForgeMini</string>
+    <key>CFBundleName</key>
+    <string>CourseForgeMini</string>
+    <key>CFBundleExecutable</key>
+    <string>CourseForgeMini</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.courseforge.pro</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    
+    <!-- 版本信息 -->
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    
+    <!-- 应用配置 -->
+    <key>CFBundleIconFile</key>
+    <string>app.icns</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.13.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    
+    <!-- 开发者信息 -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>zh_CN</string>
+    
+    <!-- 应用描述 -->
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2024 CourseForge. All rights reserved.</string>
+    
+    <!-- 文档类型支持 -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Markdown Document</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>md</string>
+                <string>markdown</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+        </dict>
+    </array>
+</dict>
+</plist> 

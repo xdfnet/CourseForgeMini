@@ -70,3 +70,5 @@ config.local.ini
 # 其他
 mkey.py
 encode_keys.py
+login_window.py
+test_endpoints.py

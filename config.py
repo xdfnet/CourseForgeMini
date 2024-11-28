@@ -3,7 +3,13 @@ import sys
 import base64
 
 # 版本号
-VERSION = "1.8.0"
+VERSION = "2.0.4" #修改了课程标题和目标用户的提示语
+
+# 调试配置
+DEBUG = {
+    'SKIP_LOGIN': True,  # 是否跳过扫码登录
+    'TEST_TOKEN': 'debug_token'  # 调试模式下使用的测试token
+}
 
 def get_api_key():
     """获取 API key"""
@@ -21,7 +27,10 @@ def load_config():
         'BASE_URL': "https://open.bigmodel.cn/api/paas/v4",
         'MODEL': "glm-4-flash",
         'MAX_TOKENS': 2048,
-        'MAX_HISTORY_LENGTH': 10
+        'MAX_HISTORY_LENGTH': 1,
+        'TEMPERATURE': 0.7,
+        'TOP_P': 0.95,
+        'DEBUG': DEBUG
     }
     return config
 
