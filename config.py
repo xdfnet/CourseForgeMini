@@ -7,7 +7,7 @@ VERSION = "2.0.4" #修改了课程标题和目标用户的提示语
 
 # 调试配置
 DEBUG = {
-    'SKIP_LOGIN': True,  # 是否跳过扫码登录
+    'SKIP_LOGIN': False,  # 是否跳过扫码登录
     'TEST_TOKEN': 'debug_token'  # 调试模式下使用的测试token
 }
 
